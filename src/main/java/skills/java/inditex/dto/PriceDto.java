@@ -1,17 +1,20 @@
 package skills.java.inditex.dto;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+/*
+ * Return class to be used by PriceConsultingController
+ * Requirements were as follows:
+ * Datos de salida: identificador de producto, identificador de cadena, tarifa a aplicar, fechas de aplicación y precio final a aplicar.
+ */
 public class PriceDto {
 
 	private int productId;
 	private int brandId;
 	private int priceList;
-	private Date startDate;
-	private Date endDate;
+	private LocalDateTime startDate;
+	private LocalDateTime endDate;
 	private String price;
-	
-	
 	
 	public int getProductId() {
 		return productId;
@@ -31,16 +34,16 @@ public class PriceDto {
 	public void setPriceList(int priceList) {
 		this.priceList = priceList;
 	}
-	public Date getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
-	public Date getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 	public String getPrice() {

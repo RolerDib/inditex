@@ -1,7 +1,6 @@
 package skills.java.inditex.controller;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -11,9 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import skills.java.inditex.dao.PriceRepository;
 import skills.java.inditex.dto.PriceDto;
+import skills.java.inditex.dto.util.DtoConverter;
+import skills.java.inditex.model.exceptions.PriceNotFoundException;
 import skills.java.inditex.model.prices.Price;
 
 
+/*
+ * Application controller
+ */
 @RestController
 public class PriceConsultingController {
 
@@ -21,30 +25,29 @@ public class PriceConsultingController {
 	PriceRepository priceDao;
 	
 
+	/**
+	 * As described by the exercise's description, the endpoint must return the actual price for requested brand/product/date information
+	 * @param brand - Brand ID to be consulted
+	 * @param productId - Product ID to be consulted
+	 * @param date - Requesting date for the price
+	 * @return A PriceDto object that contains requested information (product, price, date range)
+	 */
 	@GetMapping("/priceConsulting")
 	public PriceDto retrieveFinalPrice(
-			@RequestParam(required=true) int brand, 
+			@RequestParam(required=true) int brandId, 
 			@RequestParam(required=true) int productId, 
-			@RequestParam(name="date", required=true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date askingDate) throws Exception {
-		PriceDto priceInformation = new PriceDto();
+			@RequestParam(name="date", required=true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
 		
-		List<Price> prices = priceDao.getCurrentPriceForProduct(brand, productId, askingDate);
+		Price price;
 		
-		if(prices.isEmpty()) {
-			throw new Exception ("No prices found!");
+		try {
+			 price = priceDao.getCurrentPriceForProduct(brandId, productId, date);
+		} catch (PriceNotFoundException e) {
+			// Here we should manage the exception and return some "no results" response.
+			// For the sake of simplicity of this exercise I just return an empty dto
+			return new PriceDto();
 		}
 		
-		populatePrice(prices.get(0), priceInformation);
-		
-		return priceInformation;
-	}
-	
-	private void populatePrice (Price price, PriceDto priceInformation) {
-		priceInformation.setBrandId(price.getBrandId());
-		priceInformation.setProductId(price.getProductId());
-		priceInformation.setStartDate(price.getStartDate());
-		priceInformation.setEndDate(price.getEndDate());
-		
-		priceInformation.setPrice(price.getPrice() + " " + price.getCurrency());
+		return DtoConverter.convertToDto.apply(price);
 	}
 }

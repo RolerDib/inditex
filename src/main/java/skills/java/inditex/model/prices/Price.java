@@ -1,23 +1,26 @@
 package skills.java.inditex.model.prices;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.Table;
 
+/*
+ * Price entity as specified by this exercise's requirements
+ */
 @Entity 
-@IdClass(PriceId.class)
 @Table(name="prices")
 public class Price {
 	
-	@Id
+	@Id	
+	@Column(name="PRICE_ID")
+	private int priceID;
+	
 	@Column(name="PRICE_LIST")
 	private int priceList;
 	
-	@Id
 	@Column(name="PRODUCT_ID")
 	private int productId;
 	
@@ -25,10 +28,10 @@ public class Price {
 	private int brandId;
 	
 	@Column(name="START_DATE")
-	private Date startDate;
+	private LocalDateTime startDate;
 	
 	@Column(name="END_DATE")
-	private Date endDate;
+	private LocalDateTime endDate;
 	
 	@Column(name="PRIORITY")
 	private int priority;
@@ -63,19 +66,19 @@ public class Price {
 		this.brandId = brandId;
 	}
 
-	public Date getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
-	public Date getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}
 
